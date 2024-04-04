@@ -18,22 +18,17 @@ struct Pedal {
 };
 
 // Define pedals
-Pedal throttle = {throttlePin, 0, 1023, throttleRumblePin};
-Pedal brake = {brakePin, 0, 1023, brakeRumblePin};
-Pedal clutch = {clutchPin, 0, 1023, clutchRumblePin};
+Pedal throttle = {throttlePin, 0, 255, throttleRumblePin};
+Pedal brake = {brakePin, 0, 255, brakeRumblePin};
+Pedal clutch = {clutchPin, 0, 255, clutchRumblePin};
 
 // Create joystick object
 Joystick_ Joystick(
-    JOYSTICK_DEFAULT_REPORT_ID,
-    JOYSTICK_TYPE_JOYSTICK,
-    0,   // Number of buttons
-    0,   // Number of hat switches
-    true, // Include X and Y axis
-    true, // Include Z axis
-    false, // Include Rx and Ry axis
-    false, // Include Rz, Rudder, and Throttle axis
-    false, // Include accelerator and brake axis
-    false // Include steering and brake axis
+  JOYSTICK_DEFAULT_REPORT_ID, JOYSTICK_TYPE_JOYSTICK,
+  0, 0, // Button Count, Hat Switch Count
+  true, true, true, // X, Y, Z
+  false, false, false, // Rx, Ry, Rz
+  false, false // slider, dial
 );
 
 // Function to read pedal value and map it to a range
