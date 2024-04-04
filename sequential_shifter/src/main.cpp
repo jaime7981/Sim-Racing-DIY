@@ -5,12 +5,12 @@
 struct Switch {
   int pin;
   bool state;
-  int buttonIndex; // Index of the corresponding joystick button
+  int buttonIndex;
 };
 
 // Define switches
-Switch upShiftButton = {2, false, 0}; // Example pin and button index for upshift button
-Switch downShiftButton = {3, false, 1}; // Example pin and button index for downshift button
+Switch upShiftButton = {2, false, 0};
+Switch downShiftButton = {3, false, 1};
 
 // Define joystick object
 Joystick_ Joystick(
@@ -29,9 +29,9 @@ void updateSwitchState(Switch &button) {
     button.state = currentState;
 
     if (button.state) {
-      Joystick.releaseButton(button.buttonIndex);
-    } else {
       Joystick.pressButton(button.buttonIndex);
+    } else {
+      Joystick.releaseButton(button.buttonIndex);
     }
   }
 }
@@ -41,12 +41,14 @@ void setup() {
   Serial.begin(9600);
 
   // Set button pins as inputs with internal pull-up resistors
-  pinMode(upShiftButton.pin, INPUT_PULLUP);
-  pinMode(downShiftButton.pin, INPUT_PULLUP);
+  pinMode(upShiftButton.pin, INPUT);
+  pinMode(downShiftButton.pin, INPUT);
 
   // Set initial button state
   updateSwitchState(upShiftButton);
   updateSwitchState(downShiftButton);
+
+  Joystick.begin();
 }
 
 void loop() {
