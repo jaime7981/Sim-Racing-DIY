@@ -44,7 +44,7 @@ int readPedalValue(Pedal pedal) {
 
 // Function to control rumble motor intensity
 void controlRumble(Pedal pedal, int intensity) {
-  analogWrite(pedal.rumblePin, intensity); // Adjust intensity between 0-255
+  analogWrite(pedal.rumblePin, intensity);
 }
 
 void setup() {
