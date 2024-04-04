@@ -14,19 +14,11 @@ Switch downShiftButton = {3, false, 1}; // Example pin and button index for down
 
 // Define joystick object
 Joystick_ Joystick(
-  JOYSTICK_DEFAULT_REPORT_ID,
-  JOYSTICK_TYPE_JOYSTICK,
-  2, // Number of buttons
-  0, // Number of hat switches
-  false, // Include X axis
-  false, // Include Y axis
-  false, // Include Z axis
-  false, // Include Rx axis
-  false, // Include Ry axis
-  false, // Include Rz axis
-  false, // Include Rudder axis
-  false, // Include Throttle axis
-  false // Include Accelerator axis
+  JOYSTICK_DEFAULT_REPORT_ID, JOYSTICK_TYPE_JOYSTICK,
+  2, 0, // Button Count, Hat Switch Count
+  false, false, false, // X, Y, Z
+  false, false, false, // Rx, Ry, Rz
+  false, false // slider, dial
 );
 
 // Function to read switch state and set joystick button state
