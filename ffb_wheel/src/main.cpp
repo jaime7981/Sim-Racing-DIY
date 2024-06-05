@@ -35,8 +35,10 @@ unsigned long nextEffectsMillis;
 #define encoderPinA 3
 #define encoderPinB 2
 
-#define ENCODER_MAX_VALUE 1200
-#define ENCODER_MIN_VALUE -1200
+#define ENCODER_MAX_VALUE 5040
+#define ENCODER_MIN_VALUE -5040
+#define WHEEL_MAX_DEGREE 360
+#define WHEEL_MIN_DEGREE -360
 
 #define MOTOR_MIN_ACTIVATION 80
 #define MOTOR_MAX_ACTIVATION 244
@@ -68,7 +70,7 @@ EffectParams effects[2];
 int16_t forces[2] = {0, 0};
 
 Joystick_ Joystick(
-  JOYSTICK_DEFAULT_REPORT_ID, JOYSTICK_TYPE_JOYSTICK,
+  JOYSTICK_DEFAULT_REPORT_ID, JOYSTICK_TYPE_GAMEPAD,
   0, 0, // Button Count, Hat Switch Count
   true, false, false, // X, Y, Z
   false, false, false, // Rx, Ry, Rz
@@ -99,7 +101,7 @@ void setupJoystick() {
   pinMode(encoderPinB, INPUT_PULLUP);
   attachInterrupt(digitalPinToInterrupt(encoderPinA),tick,CHANGE);
   attachInterrupt(digitalPinToInterrupt(encoderPinB),tick,CHANGE); 
-  Joystick.setXAxisRange(ENCODER_MIN_VALUE, ENCODER_MAX_VALUE);
+  Joystick.setXAxisRange(WHEEL_MIN_DEGREE, WHEEL_MAX_DEGREE);
 
   Gains gains[FFB_AXIS_COUNT];
   gains[0].frictionGain = friction_gain;
@@ -372,22 +374,25 @@ void get_messages_from_serial()
 
 #endif
 
+int encoderTicksToDegrees(int encoderTicks) {
+    return map(encoderTicks, ENCODER_MIN_VALUE, ENCODER_MAX_VALUE, WHEEL_MIN_DEGREE, WHEEL_MAX_DEGREE);
+}
+
 void readEncoder() {
   value = currentPosition;
   
-  if(value > ENCODER_MAX_VALUE)
-  {
+  if(value > ENCODER_MAX_VALUE) {
     isOutOfRange = true;
     value = ENCODER_MAX_VALUE;
-  }else if(value < ENCODER_MIN_VALUE)
-  {
+  } else if(value < ENCODER_MIN_VALUE) {
     isOutOfRange = true;
     value = ENCODER_MIN_VALUE;
-  }else{
+  } else {
     isOutOfRange = false;
   }
 
-  Joystick.setXAxis(value);
+  int wheelDegrees = encoderTicksToDegrees(value);
+  Joystick.setXAxis(wheelDegrees);
 }
 
 void setup() {
